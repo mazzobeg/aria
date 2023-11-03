@@ -36,9 +36,9 @@ def create_app(test_config=None):
     DB.init_app(app)
     app.cli.add_command(init_db_cmd)
 
-    from aria.articles.api import ns
-    API.init_app(app) 
-    API.add_namespace(ns)
+    from aria.articles.api import NS
+    API.init_app(app)
+    API.add_namespace(NS)
 
     from aria.celery.core import my_monitor, celery
 

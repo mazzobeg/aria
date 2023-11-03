@@ -1,20 +1,29 @@
+"""
+This module contains the ArticleAPI class.
+"""
+import logging as log
 from flask_restx import Resource, Namespace
+from sqlalchemy.exc import IntegrityError
 from aria.articles.models import article_input_model, article_model, Article
 from aria import DB as db
-from sqlalchemy.exc import IntegrityError
-import logging as log
 
-ns = Namespace("api")
+NS = Namespace("api")
 
-@ns.route("/articles")
+@NS.route("/articles")
 class ArticleAPI(Resource):
-    @ns.expect(article_input_model)
-    @ns.marshal_with(article_model)
+    """
+    API Resource for articles.
+    """
+    @NS.expect(article_input_model)
+    @NS.marshal_with(article_model)
     def post(self):
+        """
+        Post method for creating an article.
+        """
         article = Article(
-            title=ns.payload["title"],
-            link=ns.payload["link"],
-            content=ns.payload["content"],
+            title=NS.payload["title"],
+            link=NS.payload["link"],
+            content=NS.payload["content"],
         )
         try:
             db.session.add(article)

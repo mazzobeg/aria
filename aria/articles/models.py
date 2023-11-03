@@ -4,8 +4,8 @@ This module contains the ArticleGrade Enum and the Article model.
 import hashlib
 from enum import Enum
 from sqlalchemy.orm import Mapped
-from aria import DB as db
 from flask_restx import fields
+from aria import DB as db
 from aria import API as api
 
 # pylint: disable=R0913

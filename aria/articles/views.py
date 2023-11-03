@@ -10,6 +10,7 @@ from aria.celery.core import running_tasks
 
 articles_blueprint = Blueprint("articles", __name__)
 
+
 @articles_blueprint.route("/articles", methods=["GET"])
 def articles():
     """
@@ -25,7 +26,9 @@ def articles():
             "link": article.link,
             "summary": "" if article.summary is None else article.summary,
             "grade": "" if article.grade is None else article.grade.value,
-            "domain": regex.search(article.link).group(1) if regex.search(article.link) is not None else "",
+            "domain": regex.search(article.link).group(1)
+            if regex.search(article.link) is not None
+            else "",
         }
         for article in all_articles
     ]
@@ -63,6 +66,7 @@ def delete_all_articles():
     db.session.commit()
     return redirect("/articles")
 
+
 @articles_blueprint.route("/articles/<string:article_id>", methods=["GET"])
 def get_article_by_id(article_id):
     """
@@ -80,7 +84,9 @@ def start_summarize():
     """
     Route to start summarizing articles.
     """
-    articles_without_summary = Article.query.filter(Article.summary == "" or Article.summary == None).all()
+    articles_without_summary = Article.query.filter(
+        Article.summary == "" or Article.summary == None
+    ).all()
     callback_endpoint = url_for("articles.article_add_summary", _external=True)
     uiid = summarize_articles_task.delay(
         [article.id for article in articles_without_summary],

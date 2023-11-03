@@ -1,9 +1,12 @@
 """
 This module contains the tests for the articles services.
 """
+import json
 from tests.utils import get_resources
 from aria.articles.services import summarize_text, SummarizerMode
-import json
+from aria import DB as db
+from aria.articles.models import Article
+
 
 def test_summarize_text():
     """
@@ -20,17 +23,11 @@ def test_post_article(test_app):
     """
     # create a post request for articles
     client = test_app.test_client()
-    content = {
-        "title": "test",
-        "link": "test",
-        "content": "test"
-    }
+    content = {"title": "test", "link": "test", "content": "test"}
     response = client.post(
-        "/api/articles",
-        data= json.dumps(content),
-        content_type='application/json'
-        )
-    
+        "/api/articles", data=json.dumps(content), content_type="application/json"
+    )
+
     # assert that the response is correct
     assert response.status_code == 201
     assert response.json["title"] == "test"
@@ -38,7 +35,5 @@ def test_post_article(test_app):
     assert response.json["content"] == "test"
 
     # assert that data are present in the database
-    from aria import DB as db
-    from aria.articles.models import Article
     with test_app.app_context():
         assert len(db.session.query(Article).all()) == 1
