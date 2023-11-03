@@ -4,11 +4,11 @@ This module contains the Summarizer_Mode class and functions for summarizing tex
 # pylint: disable=R0903
 import logging as log
 import requests
-from aria.articles.models import Article
 from sqlalchemy import or_
 from nltk.tokenize import sent_tokenize
 from transformers import pipeline
 from flask import current_app
+from aria.articles.models import Article
 
 class SummarizerMode:
     """
@@ -142,4 +142,3 @@ def get_articles_without_summary():
     """
     with current_app.app_context():
         return Article.query.filter(or_(Article.summary.is_(None))).all()
-
