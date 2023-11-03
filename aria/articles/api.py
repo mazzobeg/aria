@@ -1,6 +1,8 @@
 from flask_restx import Resource, Namespace
 from aria.articles.models import article_input_model, article_model, Article
 from aria import DB as db
+from sqlalchemy.exc import IntegrityError
+import logging as log
 
 ns = Namespace("api")
 
@@ -14,6 +16,10 @@ class ArticleAPI(Resource):
             link=ns.payload["link"],
             content=ns.payload["content"],
         )
-        db.session.add(article)
-        db.session.commit()
-        return article, 201
+        try:
+            db.session.add(article)
+            db.session.commit()
+            return article, 201
+        except IntegrityError:
+            log.debug("Article already in database")
+            return article, 500
