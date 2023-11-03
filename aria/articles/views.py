@@ -28,7 +28,7 @@ def articles():
             "link": article.link,
             "summary": "" if article.summary is None else article.summary,
             "grade": "" if article.grade is None else article.grade.value,
-            "domain": regex.search(article.link).group(1),
+            "domain": regex.search(article.link).group(1) if regex.search(article.link) is not None else "",
         }
         for article in all_articles
     ]

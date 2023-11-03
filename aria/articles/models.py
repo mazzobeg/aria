@@ -5,6 +5,8 @@ import hashlib
 from enum import Enum
 from sqlalchemy.orm import Mapped
 from aria import DB as db
+from flask_restx import fields
+from aria import API as api
 
 # pylint: disable=R0913
 
@@ -51,3 +53,18 @@ class Article(db.Model):
         self.content = content
         self.summary = summary
         self.grade = grade
+
+article_model = api.model("Article", {
+    "id": fields.String(required=True),
+    "title": fields.String(required=True),
+    "link": fields.String(required=True),
+    "content": fields.String(required=True),
+    "summary": fields.String(required=False),
+    "grade": fields.String(required=False),
+})
+
+article_input_model = api.model("ArticleInput", {
+    "title": fields.String(required=True),
+    "link": fields.String(required=True),
+    "content": fields.String(required=True),
+})
