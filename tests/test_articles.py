@@ -3,10 +3,9 @@ This module contains the tests for the articles services.
 """
 import json
 from tests.utils import get_resources
-from aria.articles.services import summarize_text, SummarizerMode
+from aria.articles.services import summarize_text, SummarizerMode, get_articles_without_summary
 from aria import DB as db
 from aria.articles.models import Article
-
 
 def test_summarize_text():
     """
@@ -37,3 +36,17 @@ def test_post_article(test_app):
     # assert that data are present in the database
     with test_app.app_context():
         assert len(db.session.query(Article).all()) == 1
+
+
+def test_get_articles_without_summary(test_app):
+    """
+    Test the get_articles_without_summary function.
+    """
+    test_app.app_context().push()
+    with test_app.app_context():
+        db.session.add(Article("TITLE1", "LINK1", "CONTENT1"))
+        db.session.commit()
+
+    articles = get_articles_without_summary()
+    assert articles is not None
+    assert len(articles) == 1
