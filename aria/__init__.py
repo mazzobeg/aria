@@ -4,13 +4,13 @@ This module contains the Flask application factory and the database initializati
 # pylint: disable=R0401
 # pylint: disable=C0415
 from threading import Thread
+import logging as log
 from flask import Flask, redirect
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from flask_restx import Api
 import click
-import logging as log
 
 class Base(DeclarativeBase):
     """
